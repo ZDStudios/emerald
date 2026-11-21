@@ -49,6 +49,7 @@ pub fn command_for(mods: u32, vk: i32) -> Option<&'static str> {
         _ if primary && key('D') => "bookmark.add",
         _ if primary && key(',') || (primary && vk == 0xBC) => "settings",
         _ if vk == 0x7A /* F11 */ => "fullscreen",
+        _ if cfg!(target_os = "macos") && primary && key('Q') => "app.quit",
         _ => return None,
     })
 }

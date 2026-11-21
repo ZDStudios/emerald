@@ -84,10 +84,39 @@ jobs:
           name: emerald-linux-x64
           path: dist/*.tar.gz
 
+  macos:
+    name: macOS (Apple Silicon)
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Install Ninja
+        run: brew install ninja
+      - name: Fetch CEF binaries
+        run: |
+          cargo install export-cef-dir --version "$CEF_CRATE_VERSION" --locked
+          export-cef-dir --force "$HOME/.local/share/cef"
+          echo "CEF_PATH=$HOME/.local/share/cef" >> "$GITHUB_ENV"
+          ls "$HOME/.local/share/cef"
+      - name: Build
+        run: cargo build --release -p emerald
+      - name: Test
+        run: cargo test --release -p emerald-core
+      - name: Package (Emerald.app)
+        run: |
+          v=0.1.0-dev
+          if [ "${{ github.ref_type }}" = tag ]; then v="${GITHUB_REF_NAME#v}"; fi
+          scripts/package-macos.sh "$v"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: emerald-macos-arm64
+          path: dist/*.zip
+
   release:
     name: Publish GitHub release
     if: github.ref_type == 'tag'
-    needs: [core-tests, windows, linux]
+    needs: [core-tests, windows, linux, macos]
     runs-on: ubuntu-24.04
     permissions:
       contents: write

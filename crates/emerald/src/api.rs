@@ -389,6 +389,7 @@ pub fn command(s: &mut Shell, name: &str, args: &Value) -> Result<()> {
     let host = ab.as_ref().and_then(|b| b.host());
     match name {
         "noop" => {}
+        "app.quit" => if let Some(w) = &s.window { w.close() },
         "tab.new" => {
             let id = s.new_tab(None, None, false);
             s.activate(id);

@@ -73,12 +73,74 @@ mod imp {
 
 #[cfg(target_os = "macos")]
 mod imp {
-    // macOS hosts tabs as child NSViews; not implemented yet (see ARCHITECTURE.md §7).
+    //! Tabs are child NSViews of the window's content view. Rects arrive in device pixels with a
+    //! top-left origin; AppKit wants points, and (unless the superview is flipped) a bottom-left origin.
     use super::{Handle, Rect};
-    pub fn place(_h: Handle, _r: Option<Rect>) {}
-    pub fn raise(_h: Handle) {}
+    use objc2::msg_send;
+    use objc2::runtime::{AnyObject, Bool};
+    use objc2_foundation::{NSPoint, NSRect, NSSize};
+
+    pub fn place(h: Handle, r: Option<Rect>) {
+        let view = h as *mut AnyObject;
+        unsafe {
+            match r {
+                Some(r) if !r.is_empty() => {
+                    let sup: *mut AnyObject = msg_send![view, superview];
+                    let win: *mut AnyObject = msg_send![view, window];
+                    let scale: f64 = if win.is_null() { 1.0 } else { msg_send![win, backingScaleFactor] };
+                    let scale = if scale > 0.0 { scale } else { 1.0 };
+                    let (x, y, w, hgt) = (r.x as f64 / scale, r.y as f64 / scale, r.w as f64 / scale, r.h as f64 / scale);
+                    let y = if sup.is_null() {
+                        y
+                    } else {
+                        let flipped: Bool = msg_send![sup, isFlipped];
+                        if flipped.as_bool() { y } else {
+                            let f: NSRect = msg_send![sup, frame];
+                            f.size.height - y - hgt
+                        }
+                    };
+                    let frame = NSRect::new(NSPoint::new(x, y), NSSize::new(w, hgt));
+                    let _: () = msg_send![view, setFrame: frame];
+                    let _: () = msg_send![view, setHidden: Bool::NO];
+                }
+                _ => { let _: () = msg_send![view, setHidden: Bool::YES]; }
+            }
+        }
+    }
+
+    pub fn raise(h: Handle) {
+        let view = h as *mut AnyObject;
+        unsafe {
+            let sup: *mut AnyObject = msg_send![view, superview];
+            if sup.is_null() { return; }
+            // NSWindowAbove = 1; a nil reference view puts it above all siblings.
+            let nil: *mut AnyObject = std::ptr::null_mut();
+            let _: () = msg_send![sup, addSubview: view, positioned: 1isize, relativeTo: nil];
+        }
+    }
+
+    /// CEF's window handle may be the NSWindow on some versions; tabs need its content view.
+    pub fn parent_view(h: Handle) -> Handle {
+        let obj = h as *mut AnyObject;
+        unsafe {
+            let is_window: Bool = msg_send![obj, respondsToSelector: objc2::sel!(contentView)];
+            if is_window.as_bool() {
+                let v: *mut AnyObject = msg_send![obj, contentView];
+                if !v.is_null() { return v as Handle; }
+            }
+        }
+        h
+    }
 }
 
 /// Show `h` at `r`, or hide it when `r` is `None`.
 pub fn place(h: Handle, r: Option<Rect>) { if !is_null(h) { imp::place(h, r) } }
 pub fn raise(h: Handle) { if !is_null(h) { imp::raise(h) } }
+
+/// The handle tab windows should be parented to (the content view on macOS).
+pub fn parent_for(h: Handle) -> Handle {
+    #[cfg(target_os = "macos")]
+    { imp::parent_view(h) }
+    #[cfg(not(target_os = "macos"))]
+    { h }
+}

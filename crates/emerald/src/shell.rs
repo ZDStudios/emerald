@@ -319,7 +319,7 @@ impl Shell {
     // ------------------------------------------------------------------ tab browsers
 
     pub fn parent_handle(&self) -> Option<Handle> {
-        self.window.as_ref().map(|w| w.window_handle()).filter(|h| !native::is_null(*h))
+        self.window.as_ref().map(|w| native::parent_for(w.window_handle())).filter(|h| !native::is_null(*h))
     }
 
     /// Create the CEF browser for a tab (waking it if it was asleep).
