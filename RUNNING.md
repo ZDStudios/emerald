@@ -34,7 +34,12 @@ Data is stored in `%LOCALAPPDATA%\Emerald`. To make Emerald your default browser
 Emerald available as a default-browser choice" in the installer, then pick it in
 **Settings → Apps → Default apps**.
 
-## macOS (Apple Silicon, macOS 11 or later)
+## macOS (paused)
+
+The macOS port is written but its CI build is paused, so there is no macOS download yet.
+The steps below apply once it's re-enabled.
+
+### macOS (Apple Silicon, macOS 11 or later)
 
 From the `emerald-macos-arm64` artifact:
 

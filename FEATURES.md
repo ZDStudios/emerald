@@ -112,8 +112,8 @@ using `emerald-probe` and screenshots. **Windows has not been run yet**: the Win
 
 | | Status | Notes |
 |---|---|---|
-| Windows installer (Inno Setup, per-user) + portable zip | 🟡 | Script and CI job written; **not yet run**. |
-| GitHub Actions release workflow | 🟡 | Written; runs on the next push/tag. |
-| Linux tarball | 🟡 | `scripts/package-linux.sh` written, not run yet. |
+| Windows installer (Inno Setup, per-user) + portable zip | 🟡 | Built by CI (installer 131 MB, zip 189 MB) and tests pass on Windows; **not yet launched on a real Windows PC**. |
+| GitHub Actions release workflow | ✅ | Builds Linux + Windows; publishes a release on `v*` tags. The macOS job is paused. |
+| Linux tarball | ✅ | Built locally and in CI; the extracted package runs with no dev setup. |
 | Windows sandbox | ⬜ | Builds currently run with `no_sandbox` (the cef-rs Windows sandbox needs its `bootstrap.exe` layout). Top priority before any public release. |
 | Linux sandbox | ⬜ | Same: needs the SUID `chrome-sandbox` helper set up by a package. |

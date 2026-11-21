@@ -86,6 +86,8 @@ jobs:
 
   macos:
     name: macOS (Apple Silicon)
+    # Paused for now: the macOS port is written but not yet building. Remove this line to re-enable.
+    if: false
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -116,7 +118,7 @@ jobs:
   release:
     name: Publish GitHub release
     if: github.ref_type == 'tag'
-    needs: [core-tests, windows, linux, macos]
+    needs: [core-tests, windows, linux]
     runs-on: ubuntu-24.04
     permissions:
       contents: write

@@ -49,5 +49,6 @@ RSS for the same runs: spike 1,058 / 2,446 / 8,215 MB; Emerald eager 1,082 / 2,4
 | Artifact | Size |
 |---|---|
 | `emerald` binary (Rust shell, release, stripped) | 4.6 MB |
-| Linux tarball (Emerald + CEF runtime) | not measured yet |
-| Windows installer | not built yet (expect roughly 110–140 MB, since `libcef.dll` dominates) |
+| Linux tarball (Emerald + CEF runtime) | 154 MB (377 MB unpacked) |
+| Windows installer (Inno Setup) | 131 MB |
+| Windows portable zip | 189 MB |

@@ -1,8 +1,10 @@
-# Emerald
+<p align="center">
+  <img src="ui/img/emerald-256.png" alt="Emerald logo" width="128" height="128">
+</p>
 
-**A calm, minimal, ultra-customizable browser for people who get distracted, with a Rust shell over Chromium.**
+<h1 align="center">Emerald</h1>
 
-![Emerald with the command bar open](docs/screenshots/command-bar.png)
+<p align="center"><b>A calm, minimal, ultra-customizable browser for people who get distracted, with a Rust shell over Chromium.</b></p>
 
 Emerald has a thin top bar and a compact sidebar, and both can hide themselves. Idle tabs go to sleep so
 they stop using memory. Focus tools are built in: a site blocker, Pomodoro, "park this tab for later",
@@ -21,7 +23,7 @@ quick notes, reader and video modes. Every color, font, radius and layout is a t
   imports from both instead, and works with password-manager extensions such as Bitwarden.
 * **Tested on Linux (X11).** Windows is the primary target. The code has Windows paths and a
   GitHub Actions workflow builds Windows installers, but those builds have **not yet been run or tested on a
-  real Windows machine**. macOS support is written and built in CI, but also not yet run on a Mac.
+  real Windows machine**. macOS support is written but its build is paused for now.
 
 The full list of what is done, partial or not possible is in [FEATURES.md](FEATURES.md).
 **To install and run a build, see [RUNNING.md](RUNNING.md).**
