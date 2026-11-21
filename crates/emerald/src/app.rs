@@ -19,7 +19,7 @@ wrap_app! {
             // so on Linux Emerald always uses X11 (XWayland on Wayland desktops).
             #[cfg(target_os = "linux")]
             if !has("ozone-platform") { cl.append_switch_with_value(Some(&cs("ozone-platform")), Some(&cs("x11"))); }
-            for s in ["no-first-run", "no-default-browser-check", "disable-search-engine-choice-screen"] {
+            for s in ["no-first-run", "no-default-browser-check", "disable-search-engine-choice-screen", "no-startup-window", "disable-session-crashed-bubble"] {
                 if !has(s) { cl.append_switch(Some(&cs(s))); }
             }
             if let Some(b) = BOOT.get() {

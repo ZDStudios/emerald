@@ -60,6 +60,11 @@ fn main() {
     if !is_browser { std::process::exit(code.max(0)); }
 
     let paths = app::PATHS.get().expect("paths");
+    // Emerald restores tabs from its own session.json. Chromium's session files would make
+    // it reopen every previous tab a second time as stray windows, so clear them first.
+    let prof = paths.engine_profile();
+    let _ = std::fs::remove_dir_all(prof.join("Sessions"));
+    for f in ["Current Session", "Current Tabs", "Last Session", "Last Tabs"] { let _ = std::fs::remove_file(prof.join(f)); }
     let dir = cef_dir();
     let s = |p: PathBuf| CefString::from(p.to_string_lossy().as_ref());
     let settings = Settings {

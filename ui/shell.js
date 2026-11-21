@@ -533,6 +533,13 @@ on("passwordSave", (d) => {
     { text: "Save", primary: true, run: () => call("pw.save", { tab: d.tab }) },
   ]).dataset.pwSave = d.tab;
 });
+on("extConfirm", (d) => {
+  const perms = d.permissions.length ? ` It can: ${d.permissions.slice(0, 6).join(", ")}${d.permissions.length > 6 ? "…" : ""}.` : "";
+  notice("info", "puzzle", `Add “${d.name}” ${d.version || ""} from Edge Add-ons? Signature verified.${perms}`, [
+    { text: "Cancel", run: () => call("ext.action", { do: "edgeConfirm", accept: false }) },
+    { text: "Add extension", primary: true, run: () => call("ext.action", { do: "edgeConfirm", accept: true }) },
+  ]);
+});
 on("copy", (text) => { navigator.clipboard.writeText(text).then(() => toast("Link copied")).catch(() => {}); });
 on("fullscreen", (fs) => { body.classList.toggle("fullscreen", !!fs); relayout(); });
 on("focusStart", () => setTimeout(() => { const q = $("#start .w-search input"); if (q) q.focus(); else run("palette"); }, 40));

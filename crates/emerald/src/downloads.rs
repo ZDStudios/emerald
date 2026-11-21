@@ -49,10 +49,18 @@ wrap_download_handler! {
         fn can_download(&self, _browser: Option<&mut Browser>, _url: Option<&CefString>, _request_method: Option<&CefString>) -> c_int { 1 }
         fn on_before_download(&self, _browser: Option<&mut Browser>, item: Option<&mut DownloadItem>, suggested_name: Option<&CefString>, callback: Option<&mut BeforeDownloadCallback>) -> c_int {
             let (Some(item), Some(cb)) = (item, callback) else { return 0 };
-            let dir = shell::query(|s| s.settings.downloads_dir.clone()).flatten().map(PathBuf::from)
+            // Extension packages fetched by the Web Store installer belong to Chromium's
+            // extension system: default handling installs them.
+            let name = opt_str(suggested_name);
+            let mime = userfree(item.mime_type());
+            if name.to_ascii_lowercase().ends_with(".crx") || mime == "application/x-chrome-extension" || userfree(item.url()).contains("/crx/blobs/") {
+                return 0;
+            }
+            let dir = std::env::var_os("EMERALD_DOWNLOAD_DIR").map(PathBuf::from)
+                .or_else(|| shell::query(|s| s.settings.downloads_dir.clone()).flatten().map(PathBuf::from))
                 .or_else(dirs_download).unwrap_or_else(std::env::temp_dir);
             let _ = std::fs::create_dir_all(&dir);
-            let path = unique_path(&dir, &opt_str(suggested_name));
+            let path = unique_path(&dir, &name);
             cb.cont(Some(&cs(&path.to_string_lossy())), 0);
             let d = Download { id: item.id(), url: userfree(item.url()), name: path.file_name().map(|n| n.to_string_lossy().into_owned()).unwrap_or_default(), path: path.to_string_lossy().into_owned(), received: 0, total: item.total_bytes(), speed: 0, state: "in_progress".into(), started: emerald_core::now_ms(), dismissed: false };
             shell::with(move |s| { s.downloads.retain(|x| x.id != d.id); s.downloads.insert(0, d); s.push_state(); s.emit_all("downloads", serde_json::json!(s.downloads)); });

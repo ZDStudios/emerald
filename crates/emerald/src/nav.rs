@@ -28,7 +28,8 @@ impl Shell {
         if self.adopted.contains(&bid) { return; }
         self.adopted.insert(bid);
         if let Some(h) = b.host() { h.close_browser(1); }
-        if self.closing { return; }
+        // Chrome opens its own new-tab page after some installs; Emerald has its own.
+        if self.closing || url.starts_with("chrome://new-tab-page") || url.starts_with("chrome://newtab") || url.starts_with("chrome-search://") { return; }
         let id = self.new_tab(Some(url), self.session.active_tab(), false);
         self.activate(id);
     }

@@ -215,6 +215,10 @@ wrap_request_handler! {
                 shell::with(move |s| s.navigate(id, "emerald://start/"));
                 return 1;
             }
+            if url.starts_with("https://emerald.invalid/") {
+                shell::with(move |s| crate::extensions::store_request(s, id, &url));
+                return 1;
+            }
             0
         }
         fn on_open_urlfrom_tab(&self, _browser: Option<&mut Browser>, _frame: Option<&mut Frame>, target_url: Option<&CefString>, target_disposition: WindowOpenDisposition, _user_gesture: c_int) -> c_int {
@@ -273,7 +277,10 @@ wrap_focus_handler! {
     impl FocusHandler {
         fn on_got_focus(&self, _browser: Option<&mut Browser>) {
             // Clicking a page or the shell dismisses the command bar / menus.
-            shell::with(|s| if s.overlay.visible { s.overlay.visible = false; if let Some(h) = s.overlay.handle { crate::native::place(h, None); } });
+            shell::with(|s| {
+                if s.overlay.visible { s.overlay.visible = false; if let Some(h) = s.overlay.handle { crate::native::place(h, None); } }
+                crate::extensions::close_popup(s);
+            });
         }
     }
 }

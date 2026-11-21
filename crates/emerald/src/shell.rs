@@ -129,6 +129,7 @@ impl Shell {
         };
         sh.reload_themes();
         sh.apply_theme();
+        crate::extensions::load_state(&mut sh);
         sh
     }
 

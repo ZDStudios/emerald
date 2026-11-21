@@ -1,6 +1,7 @@
 //! Engine-independent core of Emerald.
 //!
 //! Nothing in this crate touches CEF, so all of it is unit-tested with plain `cargo test`.
+pub mod crx;
 pub mod fuzzy;
 pub mod import;
 pub mod vault;
