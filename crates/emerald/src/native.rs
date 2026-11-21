@@ -15,7 +15,7 @@ impl Rect {
 
 pub fn is_null(h: Handle) -> bool {
     #[cfg(target_os = "windows")]
-    { h.is_null() }
+    { h.0.is_null() }
     #[cfg(not(target_os = "windows"))]
     { h as u64 == 0 }
 }
@@ -60,14 +60,14 @@ mod imp {
         unsafe {
             match r {
                 Some(r) if !r.is_empty() => {
-                    SetWindowPos(h as _, std::ptr::null_mut(), r.x, r.y, r.w, r.h, SWP_NOZORDER | SWP_NOACTIVATE | SWP_SHOWWINDOW);
+                    SetWindowPos(h.0 as _, std::ptr::null_mut(), r.x, r.y, r.w, r.h, SWP_NOZORDER | SWP_NOACTIVATE | SWP_SHOWWINDOW);
                 }
-                _ => { ShowWindow(h as _, SW_HIDE); }
+                _ => { ShowWindow(h.0 as _, SW_HIDE); }
             }
         }
     }
     pub fn raise(h: Handle) {
-        unsafe { SetWindowPos(h as _, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE); }
+        unsafe { SetWindowPos(h.0 as _, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE); }
     }
 }
 
