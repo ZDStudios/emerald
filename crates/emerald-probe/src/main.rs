@@ -171,6 +171,24 @@ fn main() -> Result<()> {
                 std::thread::sleep(Duration::from_millis(250));
             }
         }
+        "logs" => {
+            // Reload the target and print exceptions + console output for a few seconds.
+            let mut c = Cdp::open(&find(&arg(1)?)?)?;
+            c.call("Runtime.enable", json!({}))?;
+            c.call("Page.enable", json!({}))?;
+            c.call("Page.reload", json!({"ignoreCache": true}))?;
+            if let tungstenite::stream::MaybeTlsStream::Plain(s) = c.ws.get_ref() { s.set_read_timeout(Some(Duration::from_millis(300)))?; }
+            let t0 = Instant::now();
+            while t0.elapsed() < Duration::from_secs(3) {
+                let Ok(tungstenite::Message::Text(t)) = c.ws.read() else { continue };
+                let v: Value = serde_json::from_str(&t).unwrap_or_default();
+                match v["method"].as_str() {
+                    Some("Runtime.exceptionThrown") => println!("EXCEPTION {}", v["params"]["exceptionDetails"]["exception"]["description"].as_str().unwrap_or(&v["params"]["exceptionDetails"]["text"].to_string())),
+                    Some("Runtime.consoleAPICalled") => println!("console.{} {}", v["params"]["type"], v["params"]["args"].as_array().map(|a| a.iter().map(|x| x["value"].to_string()).collect::<Vec<_>>().join(" ")).unwrap_or_default()),
+                    _ => {}
+                }
+            }
+        }
         "mem" => println!("{}", serde_json::to_string_pretty(&mem(arg(1)?.parse()?))?),
         other => bail!("unknown command {other}"),
     }

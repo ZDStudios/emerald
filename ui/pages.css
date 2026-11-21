@@ -33,7 +33,7 @@
 .code { font-family: var(--em-mono); font-size: 12.5px; min-height: 160px; }
 .saved { position: fixed; right: 20px; bottom: 18px; opacity: 0; transition: opacity .3s; }
 .saved.on { opacity: 1; }
-.big-icon { color: var(--em-accent); margin-bottom: 14px; }
+.big-icon { color: var(--em-accent); margin-bottom: 14px; display: flex; justify-content: center; }
 .center-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
 .center-card { max-width: 520px; text-align: center; }
 .center-card h1 { font-size: 26px; margin: 0 0 10px; font-weight: 600; }

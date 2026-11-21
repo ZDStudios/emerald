@@ -207,7 +207,7 @@ wrap_request_handler! {
             let url = request.map(|r| util::userfree(r.url())).unwrap_or_default();
             let id = self.tab;
             // Focus-time site blocker: swap the navigation for the calm "blocked" page.
-            if let Some(Some(block_url)) = shell::query(|s| s.focus.block_redirect(&s.settings, &url)) {
+            if let Some(block_url) = crate::focus::block_redirect_snapshot(&url) {
                 shell::with(move |s| s.navigate(id, &block_url));
                 return 1;
             }

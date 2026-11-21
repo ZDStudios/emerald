@@ -9,7 +9,7 @@
     window[KEY] = null;
     return;
   }
-  const NEG = /comment|meta|footer|footnote|sidebar|sponsor|promo|related|share|social|nav|menu|header|banner|ad-|ads|advert|cookie|consent|newsletter|subscribe|popup|modal|breadcrumb/i;
+  const NEG = /comment|meta|footer|footnote|sidebar|sponsor|promo|related|share|social|nav|menu|header|banner|ad-|ads|advert|cookie|consent|newsletter|subscribe|popup|modal|breadcrumb|reflist|references|citation|cite|bibliograph|navbox|infobox|toc\b/i;
   const POS = /article|body|content|entry|main|page|post|text|blog|story|prose|markdown/i;
   const textLen = (el) => (el.innerText || "").trim().length;
   const linkDensity = (el) => {
@@ -22,7 +22,9 @@
   document.querySelectorAll("p, pre, blockquote, li").forEach((p) => {
     const len = textLen(p);
     if (len < 40) return;
-    const s = 1 + Math.min(Math.floor(len / 100), 4) + (p.innerText.split(",").length - 1) * 0.5;
+    // Paragraphs carry the article; list items (often citations or link lists) count far less.
+    const weight = p.tagName === "LI" ? 0.2 : 1;
+    const s = weight * (1 + Math.min(Math.floor(len / 100), 4) + (p.innerText.split(",").length - 1) * 0.5);
     let el = p.parentElement, depth = 0;
     while (el && el !== document.body && depth < 4) {
       scores.set(el, (scores.get(el) || 0) + s / (depth + 1));
@@ -93,6 +95,10 @@
   html.querySelector(".c").append(...clone.childNodes);
   document.documentElement.replaceWith(html);
   const root = document.documentElement;
+  if (window.__emDysFont) {
+    try { const f = new FontFace("OpenDyslexic", `url(${window.__emDysFont})`); f.load().then((x) => document.fonts.add(x)); } catch {}
+    root.classList.add("dys");
+  }
   let size = 20, width = 68;
   document.querySelector(".bar").addEventListener("click", (e) => {
     const a = e.target.dataset && e.target.dataset.a;

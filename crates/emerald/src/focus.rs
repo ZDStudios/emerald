@@ -111,6 +111,27 @@ impl FocusState {
     }
 }
 
+/// Borrow-free snapshot of the blocker for callbacks that may fire while the shell is busy.
+static SNAPSHOT: std::sync::RwLock<Option<(Settings, Option<u64>, Option<(Phase, bool, u64)>, Vec<(String, u64)>)>> = std::sync::RwLock::new(None);
+
+pub fn publish(f: &FocusState, s: &Settings) {
+    let pomo = f.pomo.as_ref().map(|p| (p.phase, p.paused_left.is_some(), p.ends));
+    if let Ok(mut g) = SNAPSHOT.write() { *g = Some((s.clone(), f.session_until, pomo, f.allow.clone())); }
+}
+
+/// Same as `FocusState::block_redirect`, from the snapshot.
+pub fn block_redirect_snapshot(url: &str) -> Option<String> {
+    let g = SNAPSHOT.read().ok()?;
+    let (s, session_until, pomo, allow) = g.as_ref()?;
+    let tmp = FocusState {
+        pomo: pomo.map(|(phase, paused, ends)| Pomo { phase, started: 0, ends, cycle: 1, paused_left: paused.then_some(1) }),
+        session_until: *session_until,
+        allow: allow.clone(),
+        ..Default::default()
+    };
+    tmp.block_redirect(s, url)
+}
+
 /// (weekday Monday=0, minutes after local midnight).
 pub fn local_now() -> (u32, u32) {
     use chrono::{Datelike, Local, Timelike};

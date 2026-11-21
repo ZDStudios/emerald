@@ -217,7 +217,16 @@ pub fn handle(s: &mut Shell, src: Source, b: &Browser, cmd: &str, a: &Value) -> 
             t.builtin = false;
             store::save_json(&s.paths.themes().join(format!("{}.json", t.id)), &t)?;
             s.reload_themes();
-            if a["apply"].as_bool().unwrap_or(true) { s.settings.theme = t.id.clone(); s.save_settings(); }
+            if a["apply"].as_bool().unwrap_or(true) {
+                s.settings.theme = t.id.clone();
+                // A theme may carry a preferred tab layout.
+                match t.tab_layout.as_deref() {
+                    Some("vertical") => s.settings.layout.tabs = emerald_core::settings::TabLayout::Vertical,
+                    Some("horizontal") => s.settings.layout.tabs = emerald_core::settings::TabLayout::Horizontal,
+                    _ => {}
+                }
+                s.save_settings();
+            }
             s.apply_theme();
             s.push_state();
             json!(t.id)
@@ -458,7 +467,7 @@ pub fn command(s: &mut Shell, name: &str, args: &Value) -> Result<()> {
             }
             s.after_tab_change();
         }
-        "reader.toggle" => if let Some(b) = &ab { crate::reader::inject(b) },
+        "reader.toggle" => if let Some(b) = &ab { crate::reader::inject(b, s.settings.adhd.dyslexia_font) },
         "video.focus" => if let Some(b) = &ab { util::exec_js(b, crate::reader::VIDEO_FOCUS_JS) },
         "history" => open_internal(s, "emerald://history/"),
         "downloads" => open_internal(s, "emerald://downloads/"),

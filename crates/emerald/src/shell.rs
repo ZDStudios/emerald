@@ -185,7 +185,7 @@ impl Shell {
             if a.big_targets { 44 } else { 32 }
         ));
         if a.dyslexia_font {
-            css.push_str("@font-face{font-family:'OpenDyslexic';src:url(fonts/OpenDyslexic-Regular.woff2) format('woff2');}\n:root{--em-font:'OpenDyslexic','Atkinson Hyperlegible',Verdana,sans-serif;}\n");
+            css.push_str("@font-face{font-family:'OpenDyslexic';src:url(fonts/OpenDyslexic-Regular.woff2) format('woff2');font-weight:400}\n@font-face{font-family:'OpenDyslexic';src:url(fonts/OpenDyslexic-Bold.woff2) format('woff2');font-weight:700}\n:root{--em-font:'OpenDyslexic','Atkinson Hyperlegible',Verdana,sans-serif;font-size:95%}\n");
         }
         if a.reduced_motion {
             css.push_str("*,*::before,*::after{animation-duration:0s!important;transition-duration:0s!important;scroll-behavior:auto!important}\n");
@@ -220,6 +220,7 @@ impl Shell {
 
     /// Coalesce state pushes: many changes in one loop turn produce one update.
     pub fn push_state(&mut self) {
+        crate::focus::publish(&self.focus, &self.settings);
         if self.push_scheduled { return; }
         self.push_scheduled = true;
         later(16, || with(|s| { s.push_scheduled = false; let st = s.state_json(); s.emit_all("state", st); }));
@@ -411,6 +412,7 @@ impl Shell {
 
     pub fn new_tab(&mut self, url: Option<&str>, opener: Option<Id>, background: bool) -> Id {
         let url = url.map(String::from).unwrap_or_else(|| "emerald://start/".into());
+        let url = self.focus.block_redirect(&self.settings, &url).unwrap_or(url);
         let id = self.session.new_tab(&url, opener, !background);
         // Tabs opened in the background start loading right away (hidden), as people expect;
         // only restored tabs are lazy. Idle ones go back to sleep after the timeout.
@@ -445,6 +447,10 @@ impl Shell {
     }
 
     pub fn navigate(&mut self, id: Id, url: &str) {
+        // Check the focus blocker here too: CEF may run on_before_browse synchronously
+        // inside load_url, while the shell is borrowed.
+        let blocked = self.focus.block_redirect(&self.settings, url);
+        let url = blocked.as_deref().unwrap_or(url);
         if let Some(t) = self.session.tab_mut(id) { t.url = url.to_string(); }
         if is_virtual_url(url) {
             self.kill_browser(id);
