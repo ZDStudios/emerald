@@ -21,9 +21,10 @@ quick notes, reader and video modes. Every color, font, radius and layout is a t
   imports from both instead, and works with password-manager extensions such as Bitwarden.
 * **Tested on Linux (X11).** Windows is the primary target. The code has Windows paths and a
   GitHub Actions workflow builds Windows installers, but those builds have **not yet been run or tested on a
-  real Windows machine**. macOS paths are stubbed.
+  real Windows machine**. macOS support is written and built in CI, but also not yet run on a Mac.
 
 The full list of what is done, partial or not possible is in [FEATURES.md](FEATURES.md).
+**To install and run a build, see [RUNNING.md](RUNNING.md).**
 
 ## Highlights
 

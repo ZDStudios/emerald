@@ -13,7 +13,7 @@ using `emerald-probe` and screenshots. **Windows has not been run yet**: the Win
 | Rust for all owned code (shell, tabs, settings, import, extensions glue, ADHD, memory) | ✅ | The UI is HTML/CSS/JS rendered by the engine (allowed by the brief; reasons in ARCHITECTURE.md). No Electron, no Node at build time or run time. |
 | Phase 0 spike: Rust + CEF | ✅ | `spike/cef-spike`: heavy sites, 4 extensions, store install, RAM 1/5/20 tabs. |
 | Phase 0 spike: Rust + wry/WebView2 | ❌ | WebView2 is Windows-only, and wry on Linux is WebKitGTK (not Chromium). Evaluated from Microsoft's docs instead: unpacked extensions only, no Web Store, "missing UI entry points". CEF was chosen. |
-| Windows first, cross-platform-ready | 🟡 | Windows paths written and CI-built, not yet run. Linux works (X11/XWayland). macOS child-view code is stubbed. |
+| Windows first, cross-platform-ready | 🟡 | Linux works (X11/XWayland). Windows and macOS (Apple Silicon `.app`) are compiled by CI but haven't been run on real machines yet. |
 
 ## Core
 
