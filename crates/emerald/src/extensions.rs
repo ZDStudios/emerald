@@ -444,7 +444,7 @@ wrap_life_span_handler! {
 wrap_keyboard_handler! {
     pub struct PopupKeys {}
     impl KeyboardHandler {
-        fn on_pre_key_event(&self, _browser: Option<&mut Browser>, event: Option<&KeyEvent>, _os_event: Option<&mut sys::XEvent>, _is_keyboard_shortcut: Option<&mut c_int>) -> c_int {
+        fn on_pre_key_event(&self, _browser: Option<&mut Browser>, event: Option<&KeyEvent>, _os_event: crate::util::OsEvent<'_>, _is_keyboard_shortcut: Option<&mut c_int>) -> c_int {
             if event.is_some_and(|e| e.type_ == KeyEventType::RAWKEYDOWN && e.windows_key_code == 0x1B) {
                 shell::with(close_popup);
                 return 1;

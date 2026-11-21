@@ -93,6 +93,18 @@ Emerald window (CEF Views, Alloy style, frameless, our draggable regions)
 * **Popups** (`window.open`): `on_before_popup` re-parents the popup as a native child tab,
   so `window.opener` survives (needed for OAuth). Real popup windows (`NEW_POPUP`
   disposition with features) keep CEF's small popup window.
+* **Chromium's own session restore is disabled.** Each native-child tab is a Chrome
+  "browser", so Chromium would reopen all of them after a restart, as extra windows.
+  Emerald deletes the engine profile's `Sessions` files before startup and passes
+  `--no-startup-window`. `session.json` is the only source of truth (testing found the
+  duplication before this fix).
+* **Single instance.** A second launch (for example a link clicked in another app while
+  Emerald is the default browser) is forwarded by Chromium's process singleton to
+  `on_already_running_app_relaunch`, which opens the URLs as tabs.
+* **Re-entrancy.** Some CEF calls (such as `load_url`) can run handlers synchronously. Shell
+  state lives in a thread-local `RefCell`; callbacks go through `shell::with`, which defers to
+  the next loop turn when the shell is busy. The focus blocker additionally keeps a
+  borrow-free snapshot, because a missed check there would let a blocked site through.
 
 ## 3. UI technology: HTML/CSS/JS in Alloy views (no Node, no build step)
 

@@ -2,6 +2,7 @@
 name = "emerald-core"
 version.workspace = true
 edition.workspace = true
+license.workspace = true
 publish = false
 description = "Engine-independent core of the Emerald browser: settings, session model, themes, importers, focus tools."
 

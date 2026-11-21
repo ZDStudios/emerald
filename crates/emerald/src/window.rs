@@ -32,7 +32,17 @@ wrap_window_delegate! {
             w.show();
             v.request_focus();
             let w2 = w.clone();
-            shell::with(move |s| { s.window = Some(w2); s.apply_layout(); });
+            shell::with(move |s| {
+                s.window = Some(w2);
+                s.apply_layout();
+                // `--eager`: load every tab now (used to measure the cost Emerald avoids).
+                if std::env::args().any(|a| a == "--eager") {
+                    crate::util::later(1500, || shell::with(|s| {
+                        let ids: Vec<_> = s.session.tabs.iter().map(|t| t.id).collect();
+                        for id in ids { if !s.live.contains_key(&id) { s.spawn(id, None); } }
+                    }));
+                }
+            });
         }
         fn on_window_destroyed(&self, _window: Option<&mut Window>) {
             *self.ui.borrow_mut() = None;

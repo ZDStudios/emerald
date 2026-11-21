@@ -5,10 +5,12 @@ fn main() {
     #[cfg(target_os = "windows")]
     {
         let mut res = winres::WindowsResource::new();
-        if std::path::Path::new("../../packaging/windows/emerald.ico").exists() {
-            res.set_icon("../../packaging/windows/emerald.ico");
-        }
-        res.set("ProductName", "Emerald").set("FileDescription", "Emerald Browser");
-        let _ = res.compile();
+        res.set_icon("../../packaging/windows/emerald.ico");
+        res.set_manifest_file("../../packaging/windows/emerald.exe.manifest");
+        res.set("ProductName", "Emerald")
+            .set("FileDescription", "Emerald Browser")
+            .set("CompanyName", "Emerald")
+            .set("LegalCopyright", "MIT OR Apache-2.0");
+        res.compile().expect("compiling Windows resources (icon, manifest)");
     }
 }

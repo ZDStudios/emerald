@@ -52,5 +52,32 @@ wrap_browser_process_handler! {
             crate::nav::start_housekeeping();
         }
         fn default_client(&self) -> Option<Client> { Some(crate::client::foreign_client()) }
+        fn on_already_running_app_relaunch(&self, command_line: Option<&mut CommandLine>, current_directory: Option<&CefString>) -> ::std::os::raw::c_int {
+            // A second launch (e.g. a link clicked in another app) is forwarded here by
+            // Chromium's process singleton: open its URLs as tabs in this window.
+            let mut args = CefStringList::new();
+            if let Some(cl) = command_line { cl.arguments(Some(&mut args)); }
+            let cwd = current_directory.map(|c| c.to_string()).unwrap_or_default();
+            let urls = launch_targets(args.into_iter().collect(), &cwd);
+            crate::shell::with(move |s| {
+                for u in &urls { let id = s.new_tab(Some(u), None, false); s.activate(id); }
+                if let Some(w) = &s.window { if w.is_minimized() != 0 { w.restore(); } w.activate(); w.bring_to_top(); }
+            });
+            1
+        }
     }
+}
+
+/// URLs to open from command-line arguments: http(s)/file/emerald URLs and local files.
+pub fn launch_targets(args: Vec<String>, cwd: &str) -> Vec<String> {
+    args.into_iter().filter(|a| !a.starts_with('-')).filter_map(|a| {
+        let lower = a.to_ascii_lowercase();
+        if ["http://", "https://", "file://", "emerald://"].iter().any(|p| lower.starts_with(p)) { return Some(a); }
+        let p = std::path::Path::new(&a);
+        let p = if p.is_absolute() { p.to_path_buf() } else { std::path::Path::new(cwd).join(p) };
+        p.exists().then(|| {
+            let s = p.to_string_lossy().replace('\\', "/");
+            if s.starts_with('/') { format!("file://{s}") } else { format!("file:///{s}") }
+        })
+    }).collect()
 }

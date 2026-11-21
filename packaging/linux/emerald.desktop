@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Emerald
+GenericName=Web Browser
+Comment=A calm, minimal, customizable browser
+Exec=emerald %U
+Icon=emerald
+Terminal=false
+Categories=Network;WebBrowser;
+MimeType=text/html;x-scheme-handler/http;x-scheme-handler/https;
+StartupWMClass=Emerald

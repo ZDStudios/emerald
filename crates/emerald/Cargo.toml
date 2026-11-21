@@ -2,6 +2,7 @@
 name = "emerald"
 version.workspace = true
 edition.workspace = true
+license.workspace = true
 publish = false
 description = "Emerald: a minimal, customizable, ADHD-friendly browser (Rust shell over Chromium/CEF)."
 build = "build.rs"

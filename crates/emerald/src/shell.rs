@@ -104,6 +104,22 @@ impl Shell {
             let keep_parked = std::mem::take(&mut session.parked);
             session = Session { parked: keep_parked, ..Session::default() };
         }
+        // Benchmarks / scripted launches: `--urls=a,b,c` opens exactly these tabs.
+        // With `--eager`, every tab loads at startup (no lazy restore).
+        let cli_urls: Vec<String> = std::env::args().find_map(|a| a.strip_prefix("--urls=").map(String::from)).map(|u| u.split(',').filter(|x| !x.is_empty()).map(String::from).collect()).unwrap_or_default();
+        if !cli_urls.is_empty() {
+            let keep_parked = std::mem::take(&mut session.parked);
+            session = Session { parked: keep_parked, ..Session::default() };
+            for u in &cli_urls { session.new_tab(u, None, false); }
+            let first = session.tabs.first().map(|t| t.id);
+            if let Some(f) = first { session.activate(f); }
+        }
+        // URLs / files passed on the command line (e.g. when Emerald is the default browser).
+        let cwd = std::env::current_dir().map(|p| p.to_string_lossy().into_owned()).unwrap_or_default();
+        for u in crate::app::launch_targets(std::env::args().skip(1).collect(), &cwd) {
+            let id = session.new_tab(&u, None, true);
+            session.activate(id);
+        }
         let history = crate::history::History::open(&paths.file("history.db")).map_err(|e| eprintln!("emerald: history disabled: {e}")).ok();
         let mut sh = Self {
             themes: vec![],

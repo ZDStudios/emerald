@@ -1,0 +1,102 @@
+name: Build & release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+  pull_request:
+    paths-ignore: ["**.md"]
+
+env:
+  CARGO_TERM_COLOR: always
+  CEF_CRATE_VERSION: "156.7.0"
+
+jobs:
+  core-tests:
+    name: Core tests (Linux)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo test -p emerald-core
+
+  windows:
+    name: Windows x64
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Install Ninja and Inno Setup
+        run: choco install ninja innosetup -y --no-progress
+      - name: Fetch CEF binaries
+        shell: pwsh
+        run: |
+          cargo install export-cef-dir --version $env:CEF_CRATE_VERSION --locked
+          $cef = "$env:USERPROFILE\.local\share\cef"
+          export-cef-dir --force $cef
+          "CEF_PATH=$cef" | Out-File -FilePath $env:GITHUB_ENV -Append
+      - name: Build
+        run: cargo build --release -p emerald
+      - name: Test
+        shell: pwsh
+        run: |
+          $env:PATH = "$env:CEF_PATH;$env:PATH"
+          cargo test --release -p emerald-core -p emerald
+      - name: Package (portable zip + installer)
+        shell: pwsh
+        run: |
+          $v = if ("${{ github.ref_type }}" -eq "tag") { "${{ github.ref_name }}".TrimStart("v") } else { "0.1.0-dev" }
+          ./scripts/package-windows.ps1 -Version $v
+      - uses: actions/upload-artifact@v4
+        with:
+          name: emerald-windows-x64
+          path: |
+            dist/*.exe
+            dist/*.zip
+
+  linux:
+    name: Linux x64
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Install build tools
+        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build
+      - name: Fetch CEF binaries
+        run: |
+          cargo install export-cef-dir --version "$CEF_CRATE_VERSION" --locked
+          export-cef-dir --force "$HOME/.local/share/cef"
+          echo "CEF_PATH=$HOME/.local/share/cef" >> "$GITHUB_ENV"
+      - name: Build
+        run: cargo build --release -p emerald -p emerald-probe
+      - name: Test
+        run: LD_LIBRARY_PATH="$CEF_PATH" cargo test --release -p emerald-core -p emerald
+      - name: Package
+        run: |
+          v=0.1.0-dev
+          if [ "${{ github.ref_type }}" = tag ]; then v="${GITHUB_REF_NAME#v}"; fi
+          scripts/package-linux.sh "$v"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: emerald-linux-x64
+          path: dist/*.tar.gz
+
+  release:
+    name: Publish GitHub release
+    if: github.ref_type == 'tag'
+    needs: [core-tests, windows, linux]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*
+          generate_release_notes: true

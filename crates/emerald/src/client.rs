@@ -193,7 +193,7 @@ wrap_load_handler! {
 wrap_keyboard_handler! {
     pub struct TabKeys { tab: Id }
     impl KeyboardHandler {
-        fn on_pre_key_event(&self, _browser: Option<&mut Browser>, event: Option<&KeyEvent>, _os_event: Option<&mut sys::XEvent>, is_keyboard_shortcut: Option<&mut c_int>) -> c_int {
+        fn on_pre_key_event(&self, _browser: Option<&mut Browser>, event: Option<&KeyEvent>, _os_event: crate::util::OsEvent<'_>, is_keyboard_shortcut: Option<&mut c_int>) -> c_int {
             on_key(Source::Tab(self.tab), event, is_keyboard_shortcut)
         }
     }
@@ -355,7 +355,7 @@ wrap_display_handler! {
 wrap_keyboard_handler! {
     pub struct UiKeys { src: Source }
     impl KeyboardHandler {
-        fn on_pre_key_event(&self, _browser: Option<&mut Browser>, event: Option<&KeyEvent>, _os_event: Option<&mut sys::XEvent>, is_keyboard_shortcut: Option<&mut c_int>) -> c_int {
+        fn on_pre_key_event(&self, _browser: Option<&mut Browser>, event: Option<&KeyEvent>, _os_event: crate::util::OsEvent<'_>, is_keyboard_shortcut: Option<&mut c_int>) -> c_int {
             on_key(self.src, event, is_keyboard_shortcut)
         }
     }

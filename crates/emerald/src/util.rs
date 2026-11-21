@@ -41,6 +41,14 @@ pub fn later(ms: i64, f: impl FnOnce() + 'static) {
     post_delayed_task(ThreadId::UI, Some(&mut t), ms);
 }
 
+/// The native event passed to keyboard handlers differs per platform.
+#[cfg(target_os = "linux")]
+pub type OsEvent<'a> = Option<&'a mut cef::sys::XEvent>;
+#[cfg(target_os = "windows")]
+pub type OsEvent<'a> = Option<&'a mut cef::sys::MSG>;
+#[cfg(target_os = "macos")]
+pub type OsEvent<'a> = *mut u8;
+
 pub fn cs(s: &str) -> CefString { CefString::from(s) }
 
 pub fn opt_str(s: Option<&CefString>) -> String { s.map(|s| s.to_string()).unwrap_or_default() }
