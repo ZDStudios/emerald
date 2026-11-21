@@ -1,0 +1,12 @@
+[package]
+name = "emerald-probe"
+version.workspace = true
+edition.workspace = true
+publish = false
+description = "Developer test harness: drives a running Emerald/CEF instance over the Chrome DevTools Protocol and measures process-tree memory."
+
+[dependencies]
+tungstenite = "0.24"
+serde_json = { workspace = true }
+base64 = "0.22"
+anyhow = { workspace = true }

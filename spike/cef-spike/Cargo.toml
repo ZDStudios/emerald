@@ -1,0 +1,12 @@
+[package]
+name = "cef-spike"
+version.workspace = true
+edition.workspace = true
+publish = false
+description = "Phase 0 spike: Rust + CEF (Chrome runtime style). Throwaway; measured, then superseded by crates/emerald."
+
+[dependencies]
+cef = { workspace = true }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+x11-dl = "2"

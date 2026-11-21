@@ -1,0 +1,22 @@
+[workspace]
+resolver = "2"
+members = ["spike/cef-spike", "crates/*"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+
+
+
+[workspace.dependencies]
+cef = { version = "=156.7.0", default-features = false }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
+
+[profile.release]
+lto = "thin"
+codegen-units = 4
+strip = true
+panic = "abort"
+opt-level = 3
