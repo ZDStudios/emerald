@@ -1,0 +1,28 @@
+{
+  "id": "midnight",
+  "name": "Midnight (OLED)",
+  "author": "Emerald",
+  "mode": "dark",
+  "radius": 8,
+  "density": "comfortable",
+  "colors": {
+    "bg": "#000000",
+    "surface": "#080908",
+    "surface-2": "#101211",
+    "hover": "#171a18",
+    "active": "#1f2421",
+    "border": "#1a1d1b",
+    "text": "#e6e9e7",
+    "text-muted": "#848c88",
+    "accent": "#3ddc97",
+    "accent-text": "#00140b",
+    "accent-soft": "rgba(61,220,151,0.14)",
+    "danger": "#ff6b6b",
+    "warn": "#f2c14e",
+    "success": "#3ddc97",
+    "focus-ring": "#3ddc97",
+    "shadow": "rgba(0,0,0,0.8)"
+  },
+  "start_background": "#000000",
+  "css": ""
+}

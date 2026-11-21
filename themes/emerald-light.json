@@ -1,0 +1,28 @@
+{
+  "id": "emerald-light",
+  "name": "Emerald Light",
+  "author": "Emerald",
+  "mode": "light",
+  "radius": 10,
+  "density": "comfortable",
+  "colors": {
+    "bg": "#f3f7f5",
+    "surface": "#ffffff",
+    "surface-2": "#e9f1ed",
+    "hover": "#e0ebe5",
+    "active": "#d2e5da",
+    "border": "#d5e1db",
+    "text": "#13221b",
+    "text-muted": "#586d63",
+    "accent": "#178f5c",
+    "accent-text": "#ffffff",
+    "accent-soft": "rgba(23,143,92,0.12)",
+    "danger": "#c43f3a",
+    "warn": "#a8730f",
+    "success": "#1d8f55",
+    "focus-ring": "#178f5c",
+    "shadow": "rgba(20,40,30,0.12)"
+  },
+  "start_background": "radial-gradient(1100px 560px at 15% -10%, #c9ecd9 0%, transparent 60%), radial-gradient(900px 500px at 100% 110%, #d8ecf3 0%, transparent 55%), #f3f7f5",
+  "css": ""
+}

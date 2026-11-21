@@ -1,0 +1,28 @@
+{
+  "id": "dusk",
+  "name": "Dusk Lavender",
+  "author": "Emerald",
+  "mode": "dark",
+  "radius": 14,
+  "density": "comfortable",
+  "colors": {
+    "bg": "#14121b",
+    "surface": "#1a1723",
+    "surface-2": "#211d2d",
+    "hover": "#282338",
+    "active": "#302a43",
+    "border": "#2a253c",
+    "text": "#e6e1f1",
+    "text-muted": "#9b92b1",
+    "accent": "#b39bf0",
+    "accent-text": "#150c2a",
+    "accent-soft": "rgba(179,155,240,0.16)",
+    "danger": "#f08a9b",
+    "warn": "#e9c27a",
+    "success": "#8fd6b0",
+    "focus-ring": "#cbb8ff",
+    "shadow": "rgba(0,0,0,0.5)"
+  },
+  "start_background": "radial-gradient(1000px 520px at 20% -10%, #3a2a5c 0%, transparent 60%), #14121b",
+  "css": ""
+}

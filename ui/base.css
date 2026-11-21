@@ -1,0 +1,100 @@
+/* Emerald base styles shared by every UI surface. Colors come from theme.css. */
+*, *::before, *::after { box-sizing: border-box; }
+html { color-scheme: dark; }
+html[data-mode="light"] { color-scheme: light; }
+body {
+  margin: 0;
+  font: 13.5px/1.45 var(--em-font, system-ui, sans-serif);
+  color: var(--em-text);
+  background: var(--em-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+::selection { background: var(--em-accent-soft); }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--em-accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+:focus-visible { outline: 2px solid var(--em-focus-ring); outline-offset: 2px; border-radius: var(--em-radius-sm); }
+.muted { color: var(--em-text-muted); }
+.ic { display: block; flex: none; }
+.icw { display: inline-flex; align-items: center; justify-content: center; }
+[hidden] { display: none !important; }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--em-text-muted) 30%, transparent); border-radius: 10px; border: 3px solid transparent; background-clip: content-box; }
+::-webkit-scrollbar-thumb:hover { background-color: color-mix(in srgb, var(--em-text-muted) 55%, transparent); }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ---------- controls ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: var(--em-target, 32px); padding: 0 14px;
+  border: 1px solid var(--em-border); border-radius: var(--em-radius-sm);
+  background: var(--em-surface-2); color: var(--em-text); cursor: pointer;
+  transition: background calc(.15s * var(--em-motion, 1)), border-color calc(.15s * var(--em-motion, 1));
+  white-space: nowrap;
+}
+.btn:hover { background: var(--em-hover); }
+.btn:active { background: var(--em-active); }
+.btn.primary { background: var(--em-accent); border-color: transparent; color: var(--em-accent-text); font-weight: 600; }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; border-color: transparent; }
+.btn.ghost:hover { background: var(--em-hover); }
+.btn.danger { color: var(--em-danger); }
+.btn.small { min-height: 28px; padding: 0 10px; font-size: 12.5px; }
+.btn:disabled { opacity: .45; cursor: default; }
+.iconbtn {
+  width: var(--em-target, 32px); height: var(--em-target, 32px);
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 0; border-radius: var(--em-radius-sm); background: transparent;
+  color: var(--em-text-muted); cursor: pointer; flex: none;
+  transition: background calc(.12s * var(--em-motion, 1)), color calc(.12s * var(--em-motion, 1));
+}
+.iconbtn:hover { background: var(--em-hover); color: var(--em-text); }
+.iconbtn:active { background: var(--em-active); }
+.iconbtn:disabled { opacity: .35; cursor: default; background: transparent; }
+.iconbtn.on { color: var(--em-accent); background: var(--em-accent-soft); }
+
+.input, select.input, textarea.input {
+  width: 100%; min-height: var(--em-target, 32px); padding: 6px 11px;
+  border: 1px solid var(--em-border); border-radius: var(--em-radius-sm);
+  background: var(--em-surface); color: var(--em-text); outline: none;
+}
+textarea.input { resize: vertical; line-height: 1.5; }
+.input:focus { border-color: var(--em-accent); box-shadow: 0 0 0 3px var(--em-accent-soft); }
+
+.switch { position: relative; width: 38px; height: 22px; flex: none; appearance: none; margin: 0; border-radius: 22px; background: var(--em-active); cursor: pointer; transition: background calc(.15s * var(--em-motion, 1)); }
+.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--em-text); transition: transform calc(.15s * var(--em-motion, 1)); }
+.switch:checked { background: var(--em-accent); }
+.switch:checked::after { transform: translateX(16px); background: var(--em-accent-text); }
+
+.card { background: var(--em-surface); border: 1px solid var(--em-border); border-radius: var(--em-radius); }
+.kbd { display: inline-block; padding: 0 6px; min-width: 20px; text-align: center; border: 1px solid var(--em-border); border-bottom-width: 2px; border-radius: 5px; font: 11.5px/18px var(--em-mono); color: var(--em-text-muted); background: var(--em-surface-2); }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 2px 9px; border-radius: 99px; font-size: 12px; background: var(--em-surface-2); color: var(--em-text-muted); border: 1px solid var(--em-border); }
+.pill.accent { background: var(--em-accent-soft); color: var(--em-accent); border-color: transparent; }
+
+.fav, .fav-letter, .fav-icon { border-radius: 4px; flex: none; display: inline-flex; align-items: center; justify-content: center; }
+.fav-letter { color: #fff; font-weight: 700; line-height: 1; }
+.fav-icon { color: var(--em-accent); }
+
+/* ---------- internal pages (settings, history, …) ---------- */
+body.page-body { background: var(--em-bg); min-height: 100vh; }
+.page { max-width: 880px; margin: 0 auto; padding: 44px 28px 96px; }
+.page h1 { font-size: 26px; font-weight: 650; margin: 0 0 6px; letter-spacing: -.01em; }
+.page h2 { font-size: 15px; font-weight: 650; margin: 34px 0 10px; }
+.page .lead { color: var(--em-text-muted); margin: 0 0 22px; }
+.section { padding: 4px 0; }
+.row { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-bottom: 1px solid var(--em-border); }
+.row:last-child { border-bottom: 0; }
+.row .grow { flex: 1; min-width: 0; }
+.row .label { font-weight: 550; }
+.row .desc { color: var(--em-text-muted); font-size: 12.5px; margin-top: 2px; }
+.list-item { display: flex; align-items: center; gap: 12px; padding: 9px 12px; border-radius: var(--em-radius-sm); }
+.list-item:hover { background: var(--em-hover); }
+.list-item .t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.list-item .u { color: var(--em-text-muted); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.empty { text-align: center; padding: 56px 20px; color: var(--em-text-muted); }
+.toolbar { display: flex; gap: 10px; align-items: center; margin-bottom: 16px; }
+.tabsnav { display: flex; gap: 4px; margin-bottom: 18px; border-bottom: 1px solid var(--em-border); }
+.tabsnav button { border: 0; background: none; padding: 10px 12px; cursor: pointer; color: var(--em-text-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tabsnav button.on { color: var(--em-text); border-bottom-color: var(--em-accent); }

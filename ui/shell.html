@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Emerald</title>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="shell.css">
+<script type="module" src="shell.js"></script>
+</head>
+<body class="layout-vertical booting">
+<div id="app">
+  <aside id="sidebar" aria-label="Tabs">
+    <div class="sb-head drag">
+      <div id="spaces" class="spaces no-drag" role="tablist" aria-label="Spaces"></div>
+    </div>
+    <div id="pinned" class="pinned" aria-label="Pinned tabs"></div>
+    <button id="newtab" class="newtab no-drag" title="New tab (Ctrl+T)"><span class="icw" data-icon="plus"></span><span>New tab</span><span class="kbd">Ctrl T</span></button>
+    <div id="tabs" class="tabs" role="list"></div>
+    <div id="sb-foot" class="sb-foot"></div>
+  </aside>
+  <div id="sb-edge" class="sb-edge" title="Show sidebar"></div>
+  <main id="main">
+    <header id="topbar" class="drag">
+      <div id="tabstrip" class="tabstrip no-drag"></div>
+      <div class="navrow">
+        <button class="iconbtn no-drag" id="btn-sidebar" title="Toggle sidebar (Ctrl+Shift+S)" data-icon="sidebar"></button>
+        <button class="iconbtn no-drag" id="btn-back" title="Back (Alt+←)" data-icon="back"></button>
+        <button class="iconbtn no-drag" id="btn-forward" title="Forward (Alt+→)" data-icon="forward"></button>
+        <button class="iconbtn no-drag" id="btn-reload" title="Reload (Ctrl+R)" data-icon="reload"></button>
+        <button id="address" class="address no-drag" title="Search or enter address (Ctrl+L)">
+          <span id="addr-icon" class="addr-icon"></span>
+          <span id="addr-text" class="addr-text"></span>
+          <span id="addr-hint" class="addr-hint"><span class="kbd">Ctrl K</span></span>
+        </button>
+        <div id="toast" class="toast" aria-live="polite"></div>
+        <div id="ext-pins" class="ext-pins no-drag"></div>
+        <button class="iconbtn no-drag" id="btn-reader" title="Reader mode (Ctrl+Shift+R)" data-icon="reader"></button>
+        <button class="iconbtn no-drag" id="btn-focus" title="Focus mode: hide everything but this tab (Ctrl+Shift+F)" data-icon="focus"></button>
+        <button class="iconbtn no-drag" id="btn-menu" title="Menu" data-icon="dots"></button>
+        <div class="winctl no-drag" id="winctl">
+          <button class="iconbtn" id="win-min" title="Minimize" data-icon="min"></button>
+          <button class="iconbtn" id="win-max" title="Maximize" data-icon="max"></button>
+          <button class="iconbtn close" id="win-close" title="Close" data-icon="close"></button>
+        </div>
+      </div>
+      <div id="progress" class="progress"></div>
+    </header>
+    <div id="findbar" class="bar findbar" hidden>
+      <span class="icw" data-icon="search"></span>
+      <input id="find-input" class="input" placeholder="Find in page" spellcheck="false">
+      <span id="find-count" class="muted"></span>
+      <button class="iconbtn" id="find-prev" title="Previous (Shift+Enter)" data-icon="back"></button>
+      <button class="iconbtn" id="find-next" title="Next (Enter)" data-icon="forward"></button>
+      <button class="iconbtn" id="find-close" title="Close (Esc)" data-icon="close"></button>
+    </div>
+    <div id="notices" class="notices"></div>
+    <section id="content" aria-label="Page">
+      <div id="start" class="start" hidden></div>
+      <div id="placeholder" class="placeholder" hidden></div>
+    </section>
+  </main>
+  <div id="top-edge" class="top-edge" title="Show toolbar"></div>
+</div>
+<div id="menu" class="menu" hidden></div>
+</body>
+</html>

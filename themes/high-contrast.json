@@ -1,0 +1,28 @@
+{
+  "id": "high-contrast",
+  "name": "High Contrast",
+  "author": "Emerald",
+  "mode": "dark",
+  "radius": 4,
+  "density": "comfortable",
+  "colors": {
+    "bg": "#000000",
+    "surface": "#000000",
+    "surface-2": "#0c0c0c",
+    "hover": "#1e1e1e",
+    "active": "#333333",
+    "border": "#ffffff",
+    "text": "#ffffff",
+    "text-muted": "#d6d6d6",
+    "accent": "#00ff9c",
+    "accent-text": "#000000",
+    "accent-soft": "rgba(0,255,156,0.22)",
+    "danger": "#ff5c5c",
+    "warn": "#ffd400",
+    "success": "#00ff9c",
+    "focus-ring": "#ffd400",
+    "shadow": "rgba(0,0,0,0)"
+  },
+  "start_background": "#000000",
+  "css": ""
+}

@@ -1,0 +1,28 @@
+{
+  "id": "paper",
+  "name": "Paper (calm)",
+  "author": "Emerald",
+  "mode": "light",
+  "radius": 8,
+  "density": "comfortable",
+  "colors": {
+    "bg": "#f5f0e6",
+    "surface": "#fbf8f1",
+    "surface-2": "#eee6d7",
+    "hover": "#e8dfcd",
+    "active": "#e0d4bd",
+    "border": "#ddd1bb",
+    "text": "#3a3125",
+    "text-muted": "#786b58",
+    "accent": "#5c8a57",
+    "accent-text": "#ffffff",
+    "accent-soft": "rgba(92,138,87,0.14)",
+    "danger": "#b5473c",
+    "warn": "#a37720",
+    "success": "#4f7f4a",
+    "focus-ring": "#5c8a57",
+    "shadow": "rgba(80,60,30,0.12)"
+  },
+  "start_background": "linear-gradient(180deg, #f5f0e6 0%, #efe6d4 100%)",
+  "css": ""
+}

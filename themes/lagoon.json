@@ -1,0 +1,28 @@
+{
+  "id": "lagoon",
+  "name": "Lagoon",
+  "author": "Emerald",
+  "mode": "dark",
+  "radius": 12,
+  "density": "comfortable",
+  "colors": {
+    "bg": "#0c151f",
+    "surface": "#101c28",
+    "surface-2": "#162534",
+    "hover": "#1b2d3f",
+    "active": "#22364b",
+    "border": "#1d2f42",
+    "text": "#dce7f1",
+    "text-muted": "#879db1",
+    "accent": "#3cc3c8",
+    "accent-text": "#021416",
+    "accent-soft": "rgba(60,195,200,0.15)",
+    "danger": "#f07178",
+    "warn": "#f0c060",
+    "success": "#5fd3a0",
+    "focus-ring": "#6fe3e8",
+    "shadow": "rgba(0,0,0,0.45)"
+  },
+  "start_background": "radial-gradient(1000px 520px at 80% -10%, #12405a 0%, transparent 60%), #0c151f",
+  "css": ""
+}

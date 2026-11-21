@@ -1,0 +1,28 @@
+{
+  "id": "emerald-dark",
+  "name": "Emerald Dark",
+  "author": "Emerald",
+  "mode": "dark",
+  "radius": 10,
+  "density": "comfortable",
+  "colors": {
+    "bg": "#0e1512",
+    "surface": "#131c18",
+    "surface-2": "#19251f",
+    "hover": "#1f2e27",
+    "active": "#24382f",
+    "border": "#22322b",
+    "text": "#e2ede7",
+    "text-muted": "#8ea398",
+    "accent": "#34c084",
+    "accent-text": "#03150d",
+    "accent-soft": "rgba(52,192,132,0.16)",
+    "danger": "#ef6f6c",
+    "warn": "#e8b75a",
+    "success": "#4fcf8f",
+    "focus-ring": "#5fe0a6",
+    "shadow": "rgba(0,0,0,0.45)"
+  },
+  "start_background": "radial-gradient(1100px 560px at 15% -10%, #174632 0%, transparent 60%), radial-gradient(900px 500px at 100% 110%, #0f2d3a 0%, transparent 55%), #0e1512",
+  "css": ""
+}

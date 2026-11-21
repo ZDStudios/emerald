@@ -1,0 +1,12 @@
+[package]
+name = "emerald-core"
+version.workspace = true
+edition.workspace = true
+publish = false
+description = "Engine-independent core of the Emerald browser: settings, session model, themes, importers, focus tools."
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+dirs = "6"
