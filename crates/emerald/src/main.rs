@@ -17,6 +17,7 @@ mod memory;
 mod menus;
 mod native;
 mod nav;
+mod passwords;
 mod privacy;
 mod reader;
 mod scheme;

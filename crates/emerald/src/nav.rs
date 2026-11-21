@@ -17,6 +17,7 @@ impl Shell {
         let title = self.session.tab(id).map(|t| t.title.clone()).unwrap_or_default();
         if let Some(h) = self.history.as_mut() { h.record(&url, &title, now_ms() as i64); }
         crate::extensions::on_page_loaded(self, id, b, &url);
+        crate::passwords::on_page_loaded(self, id, b, &url);
         if self.reader_pending.remove(&id) { crate::reader::inject(b); }
     }
 

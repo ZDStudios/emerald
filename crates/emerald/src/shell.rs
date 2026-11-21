@@ -89,6 +89,10 @@ pub struct Shell {
     pub history: Option<crate::history::History>,
     pub reader_pending: std::collections::HashSet<Id>,
     pub adopted: std::collections::HashSet<i32>,
+    pub vault: Option<emerald_core::vault::Vault>,
+    pub pw_nonce: HashMap<Id, String>,
+    pub pw_pending: HashMap<Id, (String, String, String)>,
+    pub pw_never: std::collections::HashSet<String>,
 }
 
 impl Shell {
@@ -118,6 +122,10 @@ impl Shell {
             history,
             reader_pending: Default::default(),
             adopted: Default::default(),
+            vault: None,
+            pw_nonce: HashMap::new(),
+            pw_pending: HashMap::new(),
+            pw_never: Default::default(),
         };
         sh.reload_themes();
         sh.apply_theme();

@@ -194,6 +194,9 @@ pub fn handle(s: &mut Shell, src: Source, b: &Browser, cmd: &str, a: &Value) -> 
             let mut cur = serde_json::to_value(&s.settings)?;
             merge(&mut cur, &a["patch"]);
             s.settings = serde_json::from_value(cur)?;
+            if let Some((_, url)) = emerald_core::settings::SEARCH_ENGINES.iter().find(|(n, _)| *n == s.settings.search.engine) {
+                s.settings.search.url = (*url).to_string();
+            }
             s.save_settings();
             crate::privacy::configure(s.settings.privacy.block_ads_trackers, s.settings.privacy.send_do_not_track);
             crate::privacy::apply_prefs(&s.settings);
@@ -312,6 +315,7 @@ pub fn handle(s: &mut Shell, src: Source, b: &Browser, cmd: &str, a: &Value) -> 
             json!(id)
         }
         "page.info" => json!({"url": page}),
+        c if c.starts_with("pw.") => crate::passwords::api(s, c, a)?,
         _ => bail!("unknown api call {cmd}"),
     })
 }

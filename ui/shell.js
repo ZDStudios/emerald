@@ -241,6 +241,8 @@ function renderFoot() {
 }
 
 function renderContent() {
+  // Page-specific notices (e.g. "fill password") go away when you switch tabs.
+  for (const n of document.querySelectorAll("[data-tab-scoped]")) if (Number(n.dataset.tabScoped) !== S.activeTab) { n.remove(); relayout(); }
   const t = tabById(S.activeTab);
   const start = $("#start"), ph = $("#placeholder");
   const showStart = !t || (isVirtual(t) && !(S.split && !S.focusMode));
@@ -517,6 +519,20 @@ on("permission", (p) => {
   el.dataset.perm = p.id;
 });
 on("permissionDone", (p) => { const el = $(`[data-perm="${p.id}"]`); if (el) { el.remove(); relayout(); } });
+on("passwords", (d) => {
+  if (d.tab !== S?.activeTab || $(`[data-pw="${d.tab}"]`)) return;
+  const acts = d.accounts.slice(0, 3).map((a) => ({ text: `Fill ${a.username || "password"}`, primary: true, run: () => call("pw.fill", { tab: d.tab, id: a.id }) }));
+  const el = notice("info", "lock", `Saved login available for ${hostOf(d.origin)}.`, acts);
+  el.dataset.pw = d.tab;
+  el.dataset.tabScoped = d.tab;
+});
+on("passwordSave", (d) => {
+  for (const old of document.querySelectorAll(`[data-pw-save="${d.tab}"]`)) old.remove();
+  notice("info", "lock", `Save the password for ${d.username ? d.username + " on " : ""}${hostOf(d.origin)}? It's encrypted on this computer.`, [
+    { text: "Never for this site", run: () => call("pw.save", { tab: d.tab, never: true }) },
+    { text: "Save", primary: true, run: () => call("pw.save", { tab: d.tab }) },
+  ]).dataset.pwSave = d.tab;
+});
 on("copy", (text) => { navigator.clipboard.writeText(text).then(() => toast("Link copied")).catch(() => {}); });
 on("fullscreen", (fs) => { body.classList.toggle("fullscreen", !!fs); relayout(); });
 on("focusStart", () => setTimeout(() => { const q = $("#start .w-search input"); if (q) q.focus(); else run("palette"); }, 40));

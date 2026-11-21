@@ -157,6 +157,12 @@ wrap_display_handler! {
             shell::with(move |s| s.emit_ui("fullscreen", serde_json::json!(on)));
         }
         fn on_console_message(&self, browser: Option<&mut Browser>, _level: LogSeverity, message: Option<&CefString>, source: Option<&CefString>, _line: c_int) -> c_int {
+            let msg = opt_str(message);
+            if msg.starts_with(crate::passwords::PREFIX) {
+                let id = self.tab;
+                shell::with(move |s| { crate::passwords::on_console(s, id, &msg); });
+                return 1;
+            }
             handle_console(Source::Tab(self.tab), browser, message, source)
         }
     }
