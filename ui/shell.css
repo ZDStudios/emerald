@@ -199,7 +199,7 @@ body.booting #sidebar, body.booting #topbar { visibility: hidden; }
 .w-search input { flex: 1; border: 0; outline: 0; background: transparent; font-size: 16px; color: var(--em-text); }
 .w-search .ic { color: var(--em-text-muted); }
 .links { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
-.link { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 6px; border-radius: var(--em-radius); color: var(--em-text); cursor: pointer; text-align: center; font-size: 12.5px; position: relative; }
+.link { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 6px; background: transparent; border: 0; font: inherit; border-radius: var(--em-radius); color: var(--em-text); cursor: pointer; text-align: center; font-size: 12.5px; position: relative; }
 .link:hover { background: var(--em-hover); text-decoration: none; }
 .link .tile { width: 44px; height: 44px; border-radius: 12px; background: var(--em-surface-2); border: 1px solid var(--em-border); display: flex; align-items: center; justify-content: center; }
 .link .nm { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

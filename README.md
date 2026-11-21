@@ -6,6 +6,22 @@
 
 <p align="center"><b>A calm, minimal, ultra-customizable browser for people who get distracted, with a Rust shell over Chromium.</b></p>
 
+<p align="center">
+  <a href="https://github.com/ZDStudios/emerald/releases/latest"><b>Download</b></a> ·
+  <a href="RUNNING.md">How to run</a> ·
+  <a href="FEATURES.md">Features</a> ·
+  <a href="BENCHMARKS.md">Benchmarks</a>
+</p>
+
+![Emerald with the command bar (Ctrl K) open over a page](docs/screenshots/command-bar.png)
+
+| | |
+|---|---|
+| ![Start page with clock, search, quick links, focus timer and notes](docs/screenshots/start-page.png) | ![Reader mode in the Emerald Light theme](docs/screenshots/reader-light.png) |
+| **Start page:** drawn by the shell, with draggable widgets | **Reader mode** in the Emerald Light theme |
+| ![A distracting site blocked during a Pomodoro](docs/screenshots/focus-blocked.png) | ![Theme editor with live preview](docs/screenshots/theme-editor.png) |
+| **Focus time:** distracting sites wait, gently | **Theme editor** with live preview |
+
 Emerald has a thin top bar and a compact sidebar, and both can hide themselves. Idle tabs go to sleep so
 they stop using memory. Focus tools are built in: a site blocker, Pomodoro, "park this tab for later",
 quick notes, reader and video modes. Every color, font, radius and layout is a theme you can edit live.

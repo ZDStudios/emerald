@@ -8,7 +8,9 @@ pub const VIDEO_FOCUS_JS: &str = include_str!("../../../ui/inject/video-focus.js
 
 /// Inject reader mode. With the dyslexia setting on, the bundled OpenDyslexic font is
 /// passed in as a data URL (web pages cannot load emerald:// resources) and preselected.
-pub fn inject(b: &Browser, dys: bool) {
+pub fn inject(b: &Browser, dys: bool, light: bool) {
+    // Reader colors follow Emerald's theme, not the system color scheme.
+    crate::util::exec_js(b, &format!("window.__emReaderLight={light};"));
     if dys {
         if let Some(font) = crate::scheme::asset("fonts/OpenDyslexic-Regular.woff2") {
             use base64::Engine;

@@ -468,7 +468,7 @@ pub fn command(s: &mut Shell, name: &str, args: &Value) -> Result<()> {
             }
             s.after_tab_change();
         }
-        "reader.toggle" => if let Some(b) = &ab { crate::reader::inject(b, s.settings.adhd.dyslexia_font) },
+        "reader.toggle" => if let Some(b) = &ab { crate::reader::inject(b, s.settings.adhd.dyslexia_font, s.current_theme().mode == "light") },
         "video.focus" => if let Some(b) = &ab { util::exec_js(b, crate::reader::VIDEO_FOCUS_JS) },
         "history" => open_internal(s, "emerald://history/"),
         "downloads" => open_internal(s, "emerald://downloads/"),

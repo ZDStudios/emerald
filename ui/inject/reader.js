@@ -70,7 +70,8 @@
   const html = document.createElement("html");
   html.innerHTML = `<head><meta charset="utf-8"><title></title><style>
     :root{--bg:#fbfaf6;--fg:#24211c;--muted:#7b7468;--accent:#178f5c;--size:20px;--width:68ch;--font:Charter,"Iowan Old Style",Georgia,serif;color-scheme:light dark}
-    @media (prefers-color-scheme:dark){:root{--bg:#121614;--fg:#dfe6e2;--muted:#8a978f;--accent:#4fcf8f}}
+    :root.dark{--bg:#121614;--fg:#dfe6e2;--muted:#8a978f;--accent:#4fcf8f;color-scheme:dark}
+    :root.light{color-scheme:light}
     :root.sans{--font:"Inter","Segoe UI",system-ui,sans-serif}
     :root.dys{--font:"OpenDyslexic","Atkinson Hyperlegible",Verdana,sans-serif;letter-spacing:.02em;word-spacing:.12em}
     html,body{background:var(--bg);color:var(--fg);margin:0}
@@ -95,6 +96,7 @@
   html.querySelector(".c").append(...clone.childNodes);
   document.documentElement.replaceWith(html);
   const root = document.documentElement;
+  root.classList.add(window.__emReaderLight ? "light" : "dark");
   if (window.__emDysFont) {
     try { const f = new FontFace("OpenDyslexic", `url(${window.__emDysFont})`); f.load().then((x) => document.fonts.add(x)); } catch {}
     root.classList.add("dys");

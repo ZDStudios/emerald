@@ -18,7 +18,7 @@ impl Shell {
         if let Some(h) = self.history.as_mut() { h.record(&url, &title, now_ms() as i64); }
         crate::extensions::on_page_loaded(self, id, b, &url);
         crate::passwords::on_page_loaded(self, id, b, &url);
-        if self.reader_pending.remove(&id) { crate::reader::inject(b, self.settings.adhd.dyslexia_font); }
+        if self.reader_pending.remove(&id) { crate::reader::inject(b, self.settings.adhd.dyslexia_font, self.current_theme().mode == "light"); }
     }
 
     /// A browser created by Chrome itself (e.g. `chrome.tabs.create` from an extension):
